@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.white,
         type: BottomNavigationBarType.fixed,
         unselectedItemColor: Colors.black,
-        selectedItemColor: Color.fromARGB(1000, 147, 222, 255),
+        selectedItemColor: Color.fromARGB(1000, 39, 222, 192),
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -169,8 +169,89 @@ class ThisHomePage extends StatelessWidget {
                 Icon(
                   Icons.star,
                   size: 30,
-                  color: Colors.blue,
+                  color: Color.fromARGB(255, 0, 0, 0),
                 ),
+                // Image.asset(
+                //   'lib/assets/valorant.png',
+                //   height: 24,
+                //   width: 24,
+                // ),
+                SizedBox(width: 10), // Spacing between logo and text
+                // Text
+                Text(
+                  "Valorant",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'MyFont',
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            padding: EdgeInsets.all(23),
+            margin: EdgeInsets.symmetric(horizontal: 14),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: Colors.black,
+                width: 2.5,
+              ),
+            ),
+            width: 390,
+            child: Row(
+              children: const [
+                // Logo (You can replace this with an Image widget)
+                Icon(
+                  Icons.star,
+                  size: 30,
+                  color: Color.fromARGB(255, 0, 0, 0),
+                ),
+                // Image.asset(
+                //   'lib/assets/valorant.png',
+                //   height: 24,
+                //   width: 24,
+                // ),
+                SizedBox(width: 10), // Spacing between logo and text
+                // Text
+                Text(
+                  "Valorant",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'MyFont',
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            padding: EdgeInsets.all(23),
+            margin: EdgeInsets.symmetric(horizontal: 14),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: Colors.black,
+                width: 2.5,
+              ),
+            ),
+            width: 390,
+            child: Row(
+              children: const [
+                // Logo (You can replace this with an Image widget)
+                Icon(
+                  Icons.star,
+                  size: 30,
+                  color: Color.fromARGB(255, 0, 0, 0),
+                ),
+                // Image.asset(
+                //   'lib/assets/valorant.png',
+                //   height: 24,
+                //   width: 24,
+                // ),
                 SizedBox(width: 10), // Spacing between logo and text
                 // Text
                 Text(

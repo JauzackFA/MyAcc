@@ -29,6 +29,7 @@ class _LandingPageState extends State<LandingPage> {
                       Text(
                         'Save your Account Here',
                         style: TextStyle(
+                            fontFamily: 'TruenoBold',
                             color: Colors.black,
                             fontSize: 28,
                             fontWeight: FontWeight.bold),
