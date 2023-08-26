@@ -1,62 +1,123 @@
-import "package:flutter/material.dart";
-import "package:myacc/Page/add_page.dart";
-import "package:myacc/Page/profile_page.dart";
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:myacc/Modul/add_new.dart';
+import 'package:myacc/Widget/profile_widget.dart';
+
+import '../Modul/card_acc.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  int currentIndex = 0;
-  List<Widget> buildPages = [
-    ThisHomePage(),
-    AddNew(),
-    ProfilePage(),
-  ];
-
-  void onTap(int index) {
-    setState(() {
-      currentIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    // final user = FirebaseAuth.instance.currentUser;
+    final CollectionReference _items =
+        FirebaseFirestore.instance.collection('items');
+
     return Scaffold(
       backgroundColor: Colors.white,
-      body: buildPages[
-          currentIndex], // Use the current page based on the currentIndex
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
-        onTap: onTap,
+      appBar: AppBar(
         backgroundColor: Colors.white,
-        type: BottomNavigationBarType.fixed,
-        unselectedItemColor: Colors.black,
-        selectedItemColor: Color.fromARGB(1000, 39, 222, 192),
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.add,
-              size: 30,
+        foregroundColor: Colors.black,
+        elevation: 0,
+        title: Row(
+          children: [
+            const ProfileWidget(
+              name: 'User',
+              img: 'lib/assets/yujin.jpg',
             ),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: '',
-          ),
-        ],
+            // if (user != null) // Display the user info if user is logged in
+            //   ProfileWidget(
+            //     name: user.displayName ?? 'Guest',
+            //     img: user.photoURL ?? 'lib/assets/default_profile_image.jpg',
+            //   ),
+
+            SizedBox(width: 45),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color.fromARGB(1000, 39, 222, 192),
+                foregroundColor: Colors.black,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+              onPressed: () => showModalBottomSheet(
+                isScrollControlled: true,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                context: context,
+                builder: (context) => AddNewAcc(),
+              ),
+              child: const Text('+ Add'),
+            )
+          ],
+        ),
+        automaticallyImplyLeading: false,
+        toolbarHeight: 80,
       ),
+      body: const ThisHomePage(),
+      // body: StreamBuilder(
+      //   stream: _items.snapshots(),
+      //   builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+      //     (streamSnapshot.hasData){
+      //       return ListView.builder(itemCount: streamSnapshot.data!.docs.length,
+      //       itemBuilder: (context, index) {
+      //         final DocumentSnapshot documentSnapshot = streamSnapshot.data!.docs[index];
+      //         return Card();
+      //       },);
+      //     };
+      //   },
+      // ),
+      // body: Items(items: _items),
     );
   }
 }
+
+// class Items extends StatelessWidget {
+//   const Items({
+//     super.key,
+//     required CollectionReference<Object?> items,
+//   }) : _items = items;
+
+//   final CollectionReference<Object?> _items;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return StreamBuilder(
+//       stream: _items.snapshots(),
+//       builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+//         if (streamSnapshot.hasData) {
+//           return ListView.builder(
+//             itemCount: streamSnapshot.data!.docs.length,
+//             itemBuilder: (context, index) {
+//               final DocumentSnapshot documentSnapshot =
+//                   streamSnapshot.data!.docs[index];
+//               return Card(
+//                 color: Colors.red,
+//                 shape: RoundedRectangleBorder(
+//                   borderRadius: BorderRadius.circular(20),
+//                   side: const BorderSide(color: Colors.black),
+//                 ),
+//                 margin: const EdgeInsets.all(20),
+//               );
+//             },
+//           );
+//         } else {
+//           // Return a loading indicator or placeholder when data is loading
+//           return CircularProgressIndicator(); // Replace with appropriate widget
+//         }
+//       },
+//     );
+//   }
+// }
 
 class ThisHomePage extends StatelessWidget {
   const ThisHomePage({Key? key}) : super(key: key);
@@ -66,7 +127,7 @@ class ThisHomePage extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          const SizedBox(height: 60),
+          const SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: TextField(
@@ -86,14 +147,14 @@ class ThisHomePage extends StatelessWidget {
                 focusedBorder: OutlineInputBorder(
                   borderSide: const BorderSide(
                     color: Colors.black,
-                    width: 2,
+                    width: 2.5,
                   ),
-                  borderRadius: BorderRadius.circular(18),
+                  borderRadius: BorderRadius.circular(20),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(
                     color: Colors.black,
-                    width: 2,
+                    width: 2.5,
                   ),
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -102,170 +163,14 @@ class ThisHomePage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 15),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Edit',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'MyFont',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
-                ),
-              ),
-              const SizedBox(width: 300),
-              GestureDetector(
-                onTap: () {},
-                child: const Text(
-                  'Filter',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: 'MyFont',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                  ),
-                ),
-              ),
-            ],
-          ),
+
           const SizedBox(height: 15),
-          Container(
-            padding: const EdgeInsets.all(28),
-            margin: const EdgeInsets.symmetric(horizontal: 14),
-            decoration: BoxDecoration(
-              // color: Color.fromARGB(1000, 39, 222, 192),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: Colors.black,
-                width: 2.5,
-              ),
-            ),
-            width: 390,
-            child: const Text(
-              "Valorant",
-              style: TextStyle(
-                fontSize: 14,
-                fontFamily: 'MyFont',
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+          // Hapus widget ListView.builder di sini
+          ListView.builder(
+            itemCount: 1,
+            shrinkWrap: true,
+            itemBuilder: (context, index) => CardAccWidget(),
           ),
-          const SizedBox(height: 10),
-          Container(
-            padding: EdgeInsets.all(23),
-            margin: EdgeInsets.symmetric(horizontal: 14),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: Colors.black,
-                width: 2.5,
-              ),
-            ),
-            width: 390,
-            child: Row(
-              children: const [
-                // Logo (You can replace this with an Image widget)
-                Icon(
-                  Icons.star,
-                  size: 30,
-                  color: Color.fromARGB(255, 0, 0, 0),
-                ),
-                // Image.asset(
-                //   'lib/assets/valorant.png',
-                //   height: 24,
-                //   width: 24,
-                // ),
-                SizedBox(width: 10), // Spacing between logo and text
-                // Text
-                Text(
-                  "Valorant",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'MyFont',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 10),
-          Container(
-            padding: EdgeInsets.all(23),
-            margin: EdgeInsets.symmetric(horizontal: 14),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: Colors.black,
-                width: 2.5,
-              ),
-            ),
-            width: 390,
-            child: Row(
-              children: const [
-                // Logo (You can replace this with an Image widget)
-                Icon(
-                  Icons.star,
-                  size: 30,
-                  color: Color.fromARGB(255, 0, 0, 0),
-                ),
-                // Image.asset(
-                //   'lib/assets/valorant.png',
-                //   height: 24,
-                //   width: 24,
-                // ),
-                SizedBox(width: 10), // Spacing between logo and text
-                // Text
-                Text(
-                  "Valorant",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'MyFont',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 10),
-          Container(
-            padding: EdgeInsets.all(23),
-            margin: EdgeInsets.symmetric(horizontal: 14),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: Colors.black,
-                width: 2.5,
-              ),
-            ),
-            width: 390,
-            child: Row(
-              children: const [
-                // Logo (You can replace this with an Image widget)
-                Icon(
-                  Icons.star,
-                  size: 30,
-                  color: Color.fromARGB(255, 0, 0, 0),
-                ),
-                // Image.asset(
-                //   'lib/assets/valorant.png',
-                //   height: 24,
-                //   width: 24,
-                // ),
-                SizedBox(width: 10), // Spacing between logo and text
-                // Text
-                Text(
-                  "Valorant",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'MyFont',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 10),
         ],
       ),
     );
