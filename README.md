@@ -1,6 +1,7 @@
 # myacc
 
-A new Flutter project.
+Justin Kholihan as nothing
+
 
 ## Getting Started
 
